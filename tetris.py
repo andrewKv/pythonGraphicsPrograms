@@ -1,5 +1,5 @@
 
-from Shapes import *
+from tetrisShapes import *
 import time
 import random
 
@@ -137,7 +137,6 @@ def runGame(win):
 
         floorBlocks = putBlockInBigList(leftMostPoint, bottomPoint, floorBlocks, newPiece.currentShape, newPiece.colour)
         win, floorBlocks = removeLine(win, floorBlocks)
-        print(floorBlocks)
 
     return False, win
 
