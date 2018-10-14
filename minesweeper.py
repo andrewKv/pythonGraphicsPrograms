@@ -55,13 +55,32 @@ def populateNumbers(win, grid, arraySize):
             displayX, displayY = xPos * arraySize, yPos * arraySize
             displaySquare = Rectangle(Point(displayX, displayY), Point(displayX + SQUARE_SIZE, displayY + SQUARE_SIZE))
             displaySquare.setFill("blue")
-            if grid[yPos][xPos] == 0:
-                displaySquare.setFill("grey")
             displaySquare.draw(win)
 
             xPos += 1
         yPos += 1
     return win, grid
+
+def displayNumOnClick(win, grid, xPos, yPos, arraySize):
+    displayX, displayY = xPos * arraySize, yPos * arraySize
+    t = Text(Point(displayX + SQUARE_SIZE / 2, displayY + SQUARE_SIZE / 2), str(grid[yPos][xPos]))
+    t.draw(win)
+    return win
+
+
+def squareRemoval(win, grid, xPos, yPos, arraySize):
+    if 0 in [xPos, yPos] or arraySize in [xPos,yPos]:
+        return grid
+
+    if grid[xPos][yPos] != 0:
+        return grid
+
+    win = displayNumOnClick(win, grid, xPos, yPos, arraySize)
+
+    squareRemoval(win, grid, xPos + 1, yPos, arraySize)
+    squareRemoval(win, grid, xPos- 1, yPos, arraySize)
+    squareRemoval(win, grid, xPos, yPos + 1, arraySize)
+    squareRemoval(win, grid, xPos, yPos - 1, arraySize)
 
 def createBoard(win, arraySize, mineNum):
     mineGrid = [[0 for i in range(arraySize)] for j in range(arraySize)]
@@ -73,10 +92,11 @@ def runGame(win, grid, arraySize):
     while True: #mine condition
         clickPos = win.getMouse()
         xPos, yPos = int(clickPos.getX()/SQUARE_SIZE),int(clickPos.getY()/SQUARE_SIZE)
-        displayX, displayY = xPos * arraySize, yPos * arraySize
-        if grid[yPos][xPos] != 0:
-            t = Text(Point(displayX + SQUARE_SIZE / 2, displayY + SQUARE_SIZE / 2), str(grid[yPos][xPos]))
-            t.draw(win)
+        if grid[yPos][xPos] == 0:
+            squareRemoval(win, grid, xPos, yPos , arraySize)
+        else:
+            win = displayNumOnClick(win, grid, xPos, yPos, arraySize)
+
 
 def main():
     size, mineNum = 400, 40
