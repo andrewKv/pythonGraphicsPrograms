@@ -4,13 +4,12 @@ class Node:
         self.right = None
         self.value = data
 
-
-class Tree:
+class BinaryTree:
     def __init__(self):
         self.root = None
         self.size = 0
 
-    def checkRoot(self, value):
+    def beginInsert(self, value):
         if self.root is None:
             self.root = Node(value)
         else:
@@ -28,14 +27,33 @@ class Tree:
             else:
                 node.right = Node(value)
 
-
+    def search(self, value, currentNode): #Check root, pass as currentNode
+        if value == currentNode.value:
+            print ("Found")
+            return value
+        elif currentNode.left == None and currentNode.right == None:
+            print("Not in tree")
+            return value
+        else:
+            if value < currentNode.value:
+                self.search(value, currentNode.left)
+            else:
+                self.search(value, currentNode.right)
 
     #def drawTree using graphics
 
 
 def createTree(numList):
-    binaryTree = Tree()
+    binaryTree = BinaryTree()
     for n in numList:
-        binaryTree.checkRoot(n)
+        binaryTree.beginInsert(n)
+    return binaryTree
 
-createTree([5,2,6,3,4])
+def searchTree(num, tree):
+    if tree.root is None:
+        print("Tree Empty")
+    else:
+        tree.search(num, tree.root)
+
+treeTest = createTree([5,2,6,3,4])
+searchTree(8, treeTest)
