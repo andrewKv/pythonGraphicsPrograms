@@ -7,7 +7,6 @@ class Node:
 class BinaryTree:
     def __init__(self):
         self.root = None
-        self.size = 0
 
     def beginInsert(self, value):
         if self.root is None:
@@ -27,7 +26,7 @@ class BinaryTree:
             else:
                 node.right = Node(value)
 
-    def search(self, value, currentNode): #Check root, pass as currentNode
+    def search(self, value, currentNode):
         if value == currentNode.value:
             print ("Found")
             return value
@@ -40,13 +39,19 @@ class BinaryTree:
             else:
                 self.search(value, currentNode.right)
 
-    #def drawTree using graphics
+    def calculateHeight(self, currentNode):
+        if currentNode is None:
+            return 0
+        else:
+          self.size = 1 + max(self.calculateHeight(currentNode.left), self.calculateHeight(currentNode.right))
 
+    #def drawTree using graphics
 
 def createTree(numList):
     binaryTree = BinaryTree()
     for n in numList:
         binaryTree.beginInsert(n)
+    binaryTree.calculateHeight(binaryTree.root)
     return binaryTree
 
 def searchTree(num, tree):
@@ -55,5 +60,7 @@ def searchTree(num, tree):
     else:
         tree.search(num, tree.root)
 
+
+
 treeTest = createTree([5,2,6,3,4])
-searchTree(8, treeTest)
+print (treeTest.calculateHeight(treeTest.root))
