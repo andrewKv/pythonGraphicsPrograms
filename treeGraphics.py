@@ -1,3 +1,5 @@
+from Graphics import *
+
 class Node:
     def __init__(self, data):
         self.left = None
@@ -43,9 +45,22 @@ class BinaryTree:
         if currentNode is None:
             return 0
         else:
-          self.size = 1 + max(self.calculateHeight(currentNode.left), self.calculateHeight(currentNode.right))
+            return 1 + max(self.calculateHeight(currentNode.left), self.calculateHeight(currentNode.right))
 
-    #def drawTree using graphics
+    def drawTree(self, win, currentNode, xPos, yPos):
+
+        blob = Circle(Point(xPos, yPos), 10)
+        label = Text(Point(xPos, yPos), currentNode.value)
+        blob.draw(win)
+        label.draw(win)
+        if currentNode.right is None and currentNode.left is None:
+            return win
+
+        else:
+            if currentNode.left is not None:
+                self.drawTree(win, currentNode.left, xPos - 25, yPos + 25)
+            if currentNode.right is not None:
+                self.drawTree(win, currentNode.right, xPos + 25, yPos + 25)
 
 def createTree(numList):
     binaryTree = BinaryTree()
@@ -60,7 +75,11 @@ def searchTree(num, tree):
     else:
         tree.search(num, tree.root)
 
+def showTree(tree):
+    win = GraphWin("Binary Tree", 400, 400)
+    tree.drawTree(win, tree.root, 200, 200)
+    win.getMouse()
+    win.close()
 
-
-treeTest = createTree([5,2,6,3,4])
-print (treeTest.calculateHeight(treeTest.root))
+binTree = createTree([1,3,2,6,5,9,8,7])
+showTree(binTree)
