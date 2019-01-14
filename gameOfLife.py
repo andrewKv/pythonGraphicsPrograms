@@ -10,8 +10,6 @@ class Cell:
         r = Rectangle(Point(self.pos[0], self.pos[1]), Point(self.pos[0] + 10, self.pos[1] + 10))
         if self.alive:
             r.setFill("black")
-        else:
-            r.setFill("white")
         r.draw(win)
 
 def showEmptyGrid():
