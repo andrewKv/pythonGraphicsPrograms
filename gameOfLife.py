@@ -7,24 +7,28 @@ class Cell:
     def switch(self):
         self.alive = not self.alive
     def draw(self, win):
-        r = Rectangle(Point(pos[0] / 2), pos[1] / 2), Point(pos[0] + 0.5, pos[1] + 0.5)
+        r = Rectangle(Point(self.pos[0], self.pos[1]), Point(self.pos[0] + 10, self.pos[1] + 10))
         if self.alive:
             r.setFill("black")
+        else:
+            r.setFill("white")
         r.draw(win)
 
 def showEmptyGrid():
-    emptyGrid = [[0 for i in range(100)] for j in range(100)] #100x100
     win = GraphWin("Game of Life", 500, 500)
-    for row in emptyGrid:
-        for square in row:
-            c = Cell([square,row])
+    for y in range(0,500,10):
+        for x in range(0,500,10):
+            c = Cell([x, y])
             c.draw(win)
 
+    win.getMouse()
+    win.close()
 
 
 
 def main():
     grid = showEmptyGrid()
+
     #grid = inputToGrid()
     #runSimulation(grid)
 
