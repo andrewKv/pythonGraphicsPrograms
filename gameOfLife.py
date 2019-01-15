@@ -10,7 +10,8 @@ class Cell:
         r = Rectangle(Point(self.pos[0], self.pos[1]), Point(self.pos[0] + 10, self.pos[1] + 10))
         if self.alive:
             r.setFill("black")
-
+        else:
+            r.setFill("white")
         r.draw(win)
 
 def showEmptyGrid():
@@ -25,18 +26,17 @@ def showEmptyGrid():
     return win, cellGrid
 
 def clickToGrid(pos):
-    return int(round(pos.getX(),-1)), int(round(pos.getY(), -1))
+    return int(round(pos.getX(),-1)), int(round(pos.getY(), -1)) #Could be made more accurate
 
 def inputToGrid(win, cGrid):
-    while win.checkKey() != " ":
+    while win.checkKey() != "space":
         mPos = win.getMouse()
         xPos, yPos = clickToGrid(mPos)
-
         for c in cGrid:
             if c.pos == [xPos,yPos]:
                 c.switch()
                 c.draw(win)
-    win.close()
+    return cGrid
 
 def main():
     win, grid = showEmptyGrid()
