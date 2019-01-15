@@ -38,9 +38,23 @@ def inputToGrid(win, cGrid):
                 c.draw(win)
     return cGrid
 
+def getNeighbs(pos):
+    pass
+
+def runSimulation(cGrid):
+    while win.checkMouse() == None:
+        for c in cGrid:
+            nCount = getNeighbs(c.pos)
+            
+        time.sleep(0.5)
+
+
+
 def main():
+    # Space to stop clicking inputs
+    # Click anywhere to end simulation
     win, grid = showEmptyGrid()
     grid = inputToGrid(win, grid)
-    #runSimulation(grid)
+    runSimulation(grid)
 
 main()
