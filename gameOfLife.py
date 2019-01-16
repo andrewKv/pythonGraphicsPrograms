@@ -4,6 +4,7 @@ class Cell:
     def __init__(self, pos):
         self.pos = pos
         self.alive = False
+        self.flipNextGen = False
     def switch(self):
         self.alive = not self.alive
     def draw(self, win):
@@ -55,8 +56,8 @@ def getNeighbs(c, cGrid):
         if y < 490: # Bottom Left
             if cGrid[cPlace + 49].alive:
                 neighbs += 1
-        if cGrid[cPlace - 50].alive: # Top
-            neighbs += 1
+            if cGrid[cPlace - 50].alive: # Top
+                neighbs += 1
 
     if x < 490: # Right
         if cGrid[cPlace + 1].alive:
@@ -67,23 +68,30 @@ def getNeighbs(c, cGrid):
         if y < 490: # Bottom Right
             if cGrid[cPlace + 51].alive:
                 neighbs += 1
-        if cGrid[cPlace + 50].alive: # Bottom
-            neighbs += 1
+            if cGrid[cPlace + 50].alive: # Bottom
+                neighbs += 1
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
     return neighbs
 
 def runSimulation(win, cGrid):
     while win.checkMouse() == None:
-
-        for c in cGrid:
+        for c in cGrid: #Once through determines changes
+            nCount = getNeighbs(c, cGrid)
             if c.alive:
-                nCount = getNeighbs(c, cGrid)
-                
-            c.draw(win)
+                if nCount < 2 or nCount > 3:
+                    c.flipNextGen = True # Death conditions
+                # Else lives on
+            elif nCount == 3: # Birth condition
+                c.flipNextGen = True
+
+
+        for c in cGrid: #Second time activates changes
+            if c.flipNextGen:
+                c.switch()
+                c.flipNextGen = False
+                c.draw(win)
         time.sleep(0.5)
-
-
 
 def main():
     # Space to stop clicking inputs
