@@ -13,6 +13,8 @@ class Cell:
         else:
             r.setFill("white")
         r.draw(win)
+    def getPos(self,num):
+        return self.pos[num]
 
 def showEmptyGrid():
     win = GraphWin("Game of Life", 500, 500)
@@ -38,14 +40,17 @@ def inputToGrid(win, cGrid):
                 c.draw(win)
     return cGrid
 
-def getNeighbs(pos):
+def getNeighbs(pos, cGrid):
+    #pos = [120,130]
+
     pass
 
-def runSimulation(cGrid):
+def runSimulation(win, cGrid):
     while win.checkMouse() == None:
         for c in cGrid:
-            nCount = getNeighbs(c.pos)
-            
+            print (c)
+            nCount = getNeighbs(c.pos, cGrid)
+            #if c.alive and nCount...
         time.sleep(0.5)
 
 
@@ -55,6 +60,6 @@ def main():
     # Click anywhere to end simulation
     win, grid = showEmptyGrid()
     grid = inputToGrid(win, grid)
-    runSimulation(grid)
+    runSimulation(win, grid)
 
 main()
