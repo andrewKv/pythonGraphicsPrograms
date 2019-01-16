@@ -13,8 +13,7 @@ class Cell:
         else:
             r.setFill("white")
         r.draw(win)
-    def getPos(self,num):
-        return self.pos[num]
+
 
 def showEmptyGrid():
     win = GraphWin("Game of Life", 500, 500)
@@ -40,17 +39,48 @@ def inputToGrid(win, cGrid):
                 c.draw(win)
     return cGrid
 
-def getNeighbs(pos, cGrid):
-    #pos = [120,130]
+def getNeighbs(c, cGrid):
+    neighbs = 0
+    cPlace = cGrid.index(c)
+    x = c.pos[0]
+    y = c.pos[1]
+    #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Ugly, try-catch?~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
-    pass
+    if x > 0:  # Left
+        if cGrid[cPlace - 1].alive:
+            neighbs += 1
+        if y > 0:   # Top Left
+            if cGrid[cPlace - 51].alive:
+                neighbs += 1
+        if y < 490: # Bottom Left
+            if cGrid[cPlace + 49].alive:
+                neighbs += 1
+        if cGrid[cPlace - 50].alive: # Top
+            neighbs += 1
+
+    if x < 490: # Right
+        if cGrid[cPlace + 1].alive:
+            neighbs += 1
+        if y > 0: # Top Right
+            if cGrid[cPlace - 49].alive:
+                neighbs += 1
+        if y < 490: # Bottom Right
+            if cGrid[cPlace + 51].alive:
+                neighbs += 1
+        if cGrid[cPlace + 50].alive: # Bottom
+            neighbs += 1
+    # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
+
+    return neighbs
 
 def runSimulation(win, cGrid):
     while win.checkMouse() == None:
+
         for c in cGrid:
-            print (c)
-            nCount = getNeighbs(c.pos, cGrid)
-            #if c.alive and nCount...
+            if c.alive:
+                nCount = getNeighbs(c, cGrid)
+                
+            c.draw(win)
         time.sleep(0.5)
 
 
