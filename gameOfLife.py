@@ -85,13 +85,12 @@ def runSimulation(win, cGrid):
             elif nCount == 3: # Birth condition
                 c.flipNextGen = True
 
-
+        time.sleep(0.1)
         for c in cGrid: #Second time activates changes
             if c.flipNextGen:
                 c.switch()
                 c.flipNextGen = False
                 c.draw(win)
-        time.sleep(0.5)
 
 def main():
     # Space to stop clicking inputs
