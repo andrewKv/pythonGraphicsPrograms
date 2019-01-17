@@ -1,5 +1,8 @@
 from Graphics import *
 
+CELL_SIZE = 10
+ROWS, COLUMNS = 50, 50
+
 class Cell:
     def __init__(self, pos):
         self.pos = pos
@@ -8,7 +11,7 @@ class Cell:
     def switch(self):
         self.alive = not self.alive
     def draw(self, win):
-        r = Rectangle(Point(self.pos[0], self.pos[1]), Point(self.pos[0] + 10, self.pos[1] + 10))
+        r = Rectangle(Point(self.pos[0], self.pos[1]), Point(self.pos[0] + CELL_SIZE, self.pos[1] + CELL_SIZE))
         if self.alive:
             r.setFill("black")
         else:
@@ -17,58 +20,64 @@ class Cell:
 
 
 def showEmptyGrid():
-    win = GraphWin("Game of Life", 500, 500)
+    win = GraphWin("Game of Life", ROWS * CELL_SIZE, COLUMNS * CELL_SIZE)
     cellGrid = []
-    for y in range(0,500,10):
-        for x in range(0,500,10):
-            c = Cell([x, y])
+    for y in range(0, COLUMNS):
+        for x in range(0, ROWS):
+            c = Cell([x * CELL_SIZE, y * CELL_SIZE])
             cellGrid.append(c)
             c.draw(win)
 
     return win, cellGrid
 
 def clickToGrid(pos):
-    return int(round(pos.getX(),-1)), int(round(pos.getY(), -1)) #Could be made more accurate
+    def myRound(x, base):
+        return int(base * round(float(x) / base))
+    return myRound(pos.getX(), CELL_SIZE), myRound(pos.getY(), CELL_SIZE)
 
 def inputToGrid(win, cGrid):
-    while win.checkKey() != "space":
+    placing = True
+    while placing:
         mPos = win.getMouse()
         xPos, yPos = clickToGrid(mPos)
+
         for c in cGrid:
             if c.pos == [xPos,yPos]:
                 c.switch()
                 c.draw(win)
+        placing = win.checkKey() != "space"
     return cGrid
 
 def getNeighbs(c, cGrid):
     neighbs = 0
     cPlace = cGrid.index(c)
-    x = c.pos[0]
-    y = c.pos[1]
+    x = c.pos[0]/10
+    y = c.pos[1]/10
+    squarePerRow = COLUMNS # update expression for larger Cell sizes
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Ugly, try-catch?~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
     if x > 0:  # Left
         if cGrid[cPlace - 1].alive:
             neighbs += 1
-        if y > 0:   # Top Left
-            if cGrid[cPlace - 51].alive:
+        if y > 0:  # Top Left
+            if cGrid[cPlace - (squarePerRow + 1)].alive:
                 neighbs += 1
-        if y < 490: # Bottom Left
-            if cGrid[cPlace + 49].alive:
+        if y < ROWS - 1: # Bottom Left
+            if cGrid[cPlace + (squarePerRow - 1)].alive:
                 neighbs += 1
-            if cGrid[cPlace - 50].alive: # Top
+            if cGrid[cPlace - squarePerRow].alive: # Top
                 neighbs += 1
 
-    if x < 490: # Right
+    if x < COLUMNS - 1: # Right
         if cGrid[cPlace + 1].alive:
             neighbs += 1
         if y > 0: # Top Right
-            if cGrid[cPlace - 49].alive:
+            if cGrid[cPlace - (squarePerRow - 1)].alive:
                 neighbs += 1
-        if y < 490: # Bottom Right
-            if cGrid[cPlace + 51].alive:
+        if y < ROWS - 1: # Bottom Right
+            if cGrid[cPlace + (squarePerRow + 1)].alive:
                 neighbs += 1
-            if cGrid[cPlace + 50].alive: # Bottom
+            if cGrid[cPlace + squarePerRow].alive: # Bottom
                 neighbs += 1
     # ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
@@ -85,7 +94,7 @@ def runSimulation(win, cGrid):
             elif nCount == 3: # Birth condition
                 c.flipNextGen = True
 
-        time.sleep(0.1)
+        time.sleep(0.05)
         for c in cGrid: #Second time activates changes
             if c.flipNextGen:
                 c.switch()
