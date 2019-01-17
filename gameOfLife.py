@@ -1,7 +1,7 @@
 from Graphics import *
 
-CELL_SIZE = 10
-ROWS, COLUMNS = 50, 50
+CELL_SIZE = 20
+ROWS, COLUMNS = 40, 40
 
 class Cell:
     def __init__(self, pos):
@@ -20,11 +20,11 @@ class Cell:
 
 
 def showEmptyGrid():
-    win = GraphWin("Game of Life", ROWS * CELL_SIZE, COLUMNS * CELL_SIZE)
+    win = GraphWin("Game of Life", 500, 500)
     cellGrid = []
-    for y in range(0, COLUMNS):
-        for x in range(0, ROWS):
-            c = Cell([x * CELL_SIZE, y * CELL_SIZE])
+    for y in range(0, COLUMNS * CELL_SIZE, CELL_SIZE):
+        for x in range(0, ROWS * CELL_SIZE, CELL_SIZE):
+            c = Cell([x, y])
             cellGrid.append(c)
             c.draw(win)
 
@@ -51,9 +51,9 @@ def inputToGrid(win, cGrid):
 def getNeighbs(c, cGrid):
     neighbs = 0
     cPlace = cGrid.index(c)
-    x = c.pos[0]/10
-    y = c.pos[1]/10
-    squarePerRow = COLUMNS # update expression for larger Cell sizes
+    x = c.pos[0]/CELL_SIZE
+    y = c.pos[1]/CELL_SIZE
+    squarePerRow = COLUMNS
     #~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~Ugly, try-catch?~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~#
 
     if x > 0:  # Left
